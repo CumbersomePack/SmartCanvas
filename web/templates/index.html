@@ -142,7 +142,7 @@
 <script>
   document.addEventListener("DOMContentLoaded", async function (event) {
 
-    const clientID_res = await fetch("http://" + document.domain + ":" + location.port + "/id");
+    const clientID_res = await fetch("https://" + document.domain + ":" + location.port + "/id");
     const clientID = await clientID_res.text();
     console.log("clientID:", clientID);
     
