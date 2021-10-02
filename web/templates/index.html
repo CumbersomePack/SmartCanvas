@@ -204,7 +204,7 @@
           .drawImage(clientFeed, 0, 0, canvas.width, canvas.height);
         const image_data_url = canvas.toDataURL("image/jpeg");
         socket.emit("web2server", image_data_url);
-      }, 150);
+      }, 350);
     }
     
   });
