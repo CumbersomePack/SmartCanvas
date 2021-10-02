@@ -151,7 +151,7 @@
     const canvas = document.getElementById("canvas");
 
     const socket = io.connect(
-      "http://" + document.domain + ":" + location.port + "/web/" + clientID,
+      "https://" + document.domain + ":" + location.port + "/web/" + clientID,
       { reconnection: false }
     );
 
