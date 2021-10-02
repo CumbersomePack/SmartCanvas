@@ -15,8 +15,8 @@ def filter_oil_painting(frame):
     return result
 
 catalog = {
-    'watercolor': lambda x: cv2.stylization(x, sigma_s=60, sigma_r=0.6),
     'oil_painting': lambda x: filter_oil_painting(x),
+    'watercolor': lambda x: cv2.stylization(x, sigma_s=60, sigma_r=0.6),
     'gray': lambda x: cv2.cvtColor(x, cv2.COLOR_BGR2GRAY),
     'bw_sketch': lambda x: cv2.pencilSketch(x, sigma_s=60, sigma_r=0.07, shade_factor=0.05)[0],
     'color_sketch': lambda x: cv2.pencilSketch(x, sigma_s=60, sigma_r=0.07, shade_factor=0.05)[1],
