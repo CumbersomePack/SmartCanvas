@@ -142,7 +142,7 @@
 <script>
   document.addEventListener("DOMContentLoaded", async function (event) {
 
-    const clientID_res = await fetch("https://" + document.domain + ":" + location.port + "/id");
+    const clientID_res = await fetch("/id");
     const clientID = await clientID_res.text();
     console.log("clientID:", clientID);
     
@@ -151,7 +151,7 @@
     const canvas = document.getElementById("canvas");
 
     const socket = io.connect(
-      "https://" + document.domain + ":" + location.port + "/web/" + clientID,
+      "/web/" + clientID,
       { reconnection: false }
     );
 
@@ -197,14 +197,15 @@
       canvas
         .getContext("2d")
         .drawImage(clientFeed, 0, 0, canvas.width, canvas.height);
-
+      
+      const FPS = 6;
       let interval = setInterval(() => {
         canvas
           .getContext("2d")
           .drawImage(clientFeed, 0, 0, canvas.width, canvas.height);
         const image_data_url = canvas.toDataURL("image/jpeg");
         socket.emit("web2server", image_data_url);
-      }, 50);
+      }, 1000/FPS);
     }
     
   });
