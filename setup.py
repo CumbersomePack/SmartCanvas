@@ -14,11 +14,11 @@ setup(
     long_description=long_description,
     long_description_content_type='text/markdown',
     url='https://github.com/CumbersomePack/SmartCanvas',
-    packages=find_packages(include=['smart_canvas', 'smart_canvas.*']),
+    packages=find_packages(include=['smart_canvas', 'smart_canvas.*','web']),
     install_requires=[
         # general
         'numpy==1.21.2',
-        'opencv-python-headless==4.5.3.56',
+        'opencv-python-headless==4.5.4.58',
         'pylint==2.11.1',
         'pytest==5.4.2',
         'pytest-cov==2.8.0',

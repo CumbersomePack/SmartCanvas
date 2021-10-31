@@ -20,7 +20,7 @@ run: init
 
 .PHONY: run-web
 run-web: init
-	$(PYTHON) -m web
+	export FLASK_APP=web; $(PYTHON) -m flask run
 
 .PHONY: hl
 hl: init
