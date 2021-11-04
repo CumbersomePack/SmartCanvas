@@ -6,6 +6,7 @@
 import cv2
 import numpy as np
 from threading import Thread
+
 # Internal packages
 from . import filtering
 from . import background
@@ -14,6 +15,7 @@ from . import gestureDetection
 
 class CanvasCore:
     def __init__(self, frame=None):
+
         self.current_filter = filtering.catalog[next(filtering.carousel)]
         self.framecount = 0
         self.pictureframe = None
@@ -70,3 +72,4 @@ class CanvasCore:
 
     def stop(self):
         self.stopped = True
+
