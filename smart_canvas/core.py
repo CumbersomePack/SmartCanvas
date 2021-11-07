@@ -5,7 +5,7 @@
 # External packages
 import cv2
 import numpy as np
-from threading import Thread
+from threading import Thread, Event
 import time
 
 # Internal packages
@@ -13,39 +13,47 @@ import filtering
 from gestureDetection import HandDetector
 
 class CanvasCore:
-    def __init__(self, frame=None):
+    def __init__(self, queue=None, window_scale=(1280,720), fullscreen=False):
         self.current_filter = filtering.catalog[next(filtering.carousel)]
         self.fg_mask = None
         self.pictureframe = None
-        self.frame = None
+        self.queue = queue
         self.stopped = False
-        self.frameout = None
+        self.fullscreen = fullscreen
+        self.frameout = np.zeros((1280, 720, 3), np.uint8)
         self.tick = time.time()
         self.apply_filter_freeze_time = self.tick
         self.change_filter_freeze_time = self.tick
         self.fgbg = cv2.createBackgroundSubtractorMOG2(history=240, varThreshold=150, detectShadows=False)
         self.bg_mask = None
         self.hand_detector = HandDetector(min_detection_confidence=0.9, max_num_hands=2)
+        self.framecnt = 0
 
     def change_filter(self):
         self.current_filter = filtering.catalog[next(filtering.carousel)]
         self.change_filter_freeze_time += 3
 
-    def apply_filter(self):
-        frame = self.frame
+    def apply_filter(self,frame=None):
+        
         masked_frame = cv2.bitwise_and(frame, frame, mask=self.bg_mask)
         self.pictureframe = self.current_filter(masked_frame)
         self.apply_filter_freeze_time += 5
 
     def process(self):
+        finger_count = 0
         while not self.stopped:
-            frame = self.frame
-            if frame is None:
-                continue
+            frame = self.queue.get()
+           # if self.fullscreen:
+            #    print("rotateing")
+            #    frame = cv2.rotate(frame, cv2.ROTATE_90_CLOCKWISE)
+            #print(self.framecnt)
+            #print("Frametime: " + str(time.time() - self.tick))
+            self.framecnt += 1
             
             self.tick = time.time()
             self.bg_mask = self.fgbg.apply(frame)
-            finger_count = self.hand_detector.count_fingers(frame)
+            if self.framecnt % 5 == 0:
+                finger_count = self.hand_detector.count_fingers(frame)
            
             apply_filter_freeze = (self.apply_filter_freeze_time - self.tick) > 0
             if apply_filter_freeze:
@@ -67,7 +75,7 @@ class CanvasCore:
                 continue
 
             if finger_count == 5:
-                self.apply_filter()
+                self.apply_filter(frame)
                 continue
 
             self.apply_filter_freeze_time = self.tick

@@ -4,10 +4,12 @@ from array import array
 import moderngl
 import numpy as np
 import cv2
+from queue import Queue
 
 from capture import VideoRead
 from core import CanvasCore
 from window import Window
+from moderngl_window.text.bitmapped import TextWriter2D
 
 
 class SmartRender(Window):
@@ -17,9 +19,12 @@ class SmartRender(Window):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.program = None
-
-        self.video = VideoRead(0).start()
-        self.process = CanvasCore(self.video.frame).start()
+        self.queue = Queue()
+        self.video = VideoRead(0,q=self.queue).start()
+        self.writer = TextWriter2D()
+        self.writer.text = "Testitesti"
+        self.texture_size = (1280, 720) if self.fullscreen else (720, 1280)
+        self.process = CanvasCore(queue=self.queue,fullscreen=self.fullscreen).start()
         self.fbo = self.ctx.framebuffer(
             color_attachments=[self.ctx.texture(Window.window_size, 3)]
         )
@@ -44,7 +49,7 @@ class SmartRender(Window):
                 in vec2 uv;
 
                 void main() {
-                    vec4 color = texture(image, uv);
+                    vec4 color = texture(image, uv );
                     f_color = vec4(color.b, color.g, color.r, color.a);
                 }
             ''',
@@ -53,6 +58,7 @@ class SmartRender(Window):
         self.vertices = self.ctx.buffer(
             array('f',
                   [
+
                       -1,  1, 0, 1,  # upper left
                       -1, -1, 0, 0,  # lower left
                       1,  1, 1, 1,  # upper right
@@ -68,15 +74,13 @@ class SmartRender(Window):
         )
         # TODO/TOCHECK: internal parameter format. Might get better performance when using shorter format bc default includes alpha
         self.frame_texture = self.ctx.texture(
-            (640, 480), 3)  # , internal_format=0x8C41)
-
+            (1280,720), 3) # , internal_format=0x8C41)
     def render(self, time, frame_time):
-        self.process.frame = self.video.frame
-        out_frame = self.process.frameout
-        if (out_frame is None):
-            return
-        self.frame_texture.write(cv2.flip(out_frame, 0))
+        #print(self.process.framecnt)
+       
+        self.frame_texture.write(cv2.flip(self.process.frameout,0))
         self.frame_texture.use(0)
+        self.writer.draw((240,380),size=120)
         self.quad.render(mode=moderngl.TRIANGLE_STRIP)
 
     def close(self):

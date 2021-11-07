@@ -7,8 +7,8 @@ from threading import Thread
 class Window(mglw.WindowConfig):
     gl_version = (3, 3)
     title = "SmartCanvas"
-    window_size = (1270, 720)
-    aspect_ratio = 16 / 9
+    window_size = (1280, 720)
+    aspect_ratio = None
     resizable = True
 
     def __init__(self, **kwargs):
