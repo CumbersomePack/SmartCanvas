@@ -13,7 +13,11 @@ class VideoRead:
     def __init__(self, q_producer, src=0):
         self.video_queue = q_producer
         self.stream = cv2.VideoCapture(src)
+        self.stream.set(3, 1280)
+        self.stream.set(4, 720)
         (self.status, self.frame) = self.stream.read()
+        self.width = int(self.stream.get(cv2.CAP_PROP_FRAME_WIDTH))
+        self.height = int(self.stream.get(cv2.CAP_PROP_FRAME_HEIGHT))
         self.stopped = False
 
     def start(self):
@@ -28,5 +32,4 @@ class VideoRead:
 
     def stop(self):
         self.stopped = True
-        self.video_queue.put(None)
         self.stream.release()

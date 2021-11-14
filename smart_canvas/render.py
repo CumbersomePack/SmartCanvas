@@ -20,6 +20,10 @@ class SmartRender(Window):
         self.video = VideoRead(q_producer=self.videoQueue, src=0).start()
         self.core = CanvasCore(q_consumer=self.videoQueue).start()
 
+        # set texture to size from camera
+        self.frame_texture = self.ctx.texture(
+            (self.video.width, self.video.height), 3)  # , internal_format=0x8C41)
+
     def render(self, _time, frame_time):
         out_frame = self.core.out_frame
         if (out_frame is None):
@@ -30,6 +34,7 @@ class SmartRender(Window):
 
     def close(self):
         self.video.stop()
+        self.core.stop()
 
 
 if __name__ == '__main__':

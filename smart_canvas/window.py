@@ -12,7 +12,7 @@ class Window(mglw.WindowConfig):
     """
     gl_version = (3, 3)
     title = "SmartCanvas"
-    window_size = (1270, 720)
+    window_size = (1280, 720)
     aspect_ratio = 16 / 9
     resizable = True
 
@@ -65,8 +65,7 @@ class Window(mglw.WindowConfig):
             ]
         )
         # TODO/TOCHECK: internal parameter format. Might get better performance when using shorter format bc default includes alpha
-        self.frame_texture = self.ctx.texture(
-            (640, 480), 3)  # , internal_format=0x8C41)
+
 
     @classmethod
     def run(cls):
