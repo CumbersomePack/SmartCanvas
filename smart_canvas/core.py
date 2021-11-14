@@ -51,9 +51,6 @@ class CanvasCore:
             self.tick = time.time()
 
             frame = self.q_consumer.get()
-            if frame is None:
-                self.stop()
-                break
 
             apply_filter = (self.apply_filter_freeze_time - self.tick) > 0
             if apply_filter:

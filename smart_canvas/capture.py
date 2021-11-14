@@ -29,7 +29,7 @@ class VideoRead:
             (self.status, self.frame) = self.stream.read()
             if self.status:
                 self.video_queue.put(self.frame)
+        self.stream.release()
 
     def stop(self):
         self.stopped = True
-        self.stream.release()
