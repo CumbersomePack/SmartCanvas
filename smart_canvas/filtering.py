@@ -126,7 +126,7 @@ def calcImageGradients(img):
     img = cv2.GaussianBlur(img, (3,3), sigmaX=1, sigmaY=1)
     grad_x = cv2.Sobel(img, ddepth=cv2.CV_32F, dx=1, dy=0, ksize=5)
     grad_y = cv2.Sobel(img, ddepth=cv2.CV_32F, dx=0, dy=1, ksize=5)
-    
+
     # code breaks if we don't include these, "index -1072 is out of bounds for axis 1 with size 490" at "if g_mag[y,x] == 0:" in makeSplineStroke()
     grad_x = grad_x / np.max(grad_x)
     grad_y = grad_y / np.max(grad_y)
@@ -176,7 +176,8 @@ def canvas_filter(frame):
 
 catalog = {
     'mosaic': mosaic_filter,
-    'canvas': canvas_filter
+    'canvas': canvas_filter,
+    'painterly': paint
 }
 
 carousel = itertools.cycle(catalog)
