@@ -2,7 +2,7 @@ import time
 
 import moderngl
 import cv2
-from multiprocessing import Queue
+from queue import Queue
 
 from smart_canvas.capture import VideoRead
 from smart_canvas.core import CanvasCore

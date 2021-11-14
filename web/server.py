@@ -3,7 +3,7 @@
 # Default packages
 import uuid
 import base64
-from multiprocessing import Queue
+from queue import Queue
 
 # External packages
 from flask_socketio import SocketIO
