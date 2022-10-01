@@ -1,5 +1,7 @@
 # SmartCanvas
 
+**Note: This repository is ramped down for the CumbersomePack people, see [issue #79](https://github.com/CumbersomePack/SmartCanvas/issues/79)**
+
 ## Usage with terminal commands
 If you do not have Make installed use the following commands on a terminal (like Git Bash) to install and run the program.
 ```
